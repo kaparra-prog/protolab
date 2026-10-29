@@ -275,6 +275,10 @@
     </div>
   </div>
 
+  <!-- Scripts del Proyecto -->
+  <script src="js/circuits-data.js"></script>
+  <script src="js/circuits-view.js"></script>
+
   <!-- Script de Navegación Básica -->
   <script>
     // Cambio entre pestañas
@@ -336,8 +340,13 @@
       window.dispatchEvent(new CustomEvent('labVoltageChange', { detail: { voltage: volt } }));
     }
 
-    // Restaurar última pestaña al cargar
+    // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
+      // Iniciar catálogo de circuitos
+      if (typeof initCircuitsView === 'function') {
+        initCircuitsView();
+      }
+
       const savedTab = localStorage.getItem('protolab_active_tab') || 'circuitos';
       switchTab(savedTab);
     });
