@@ -278,6 +278,7 @@
   <!-- Scripts del Proyecto -->
   <script src="js/circuits-data.js"></script>
   <script src="js/circuits-view.js"></script>
+  <script src="js/calculator.js"></script>
 
   <!-- Script de Navegación Básica -->
   <script>
@@ -345,6 +346,10 @@
       // Iniciar catálogo de circuitos
       if (typeof initCircuitsView === 'function') {
         initCircuitsView();
+      }
+      // Iniciar calculadora express
+      if (typeof initCalculatorView === 'function') {
+        initCalculatorView();
       }
 
       const savedTab = localStorage.getItem('protolab_active_tab') || 'circuitos';
