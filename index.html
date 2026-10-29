@@ -279,6 +279,8 @@
   <script src="js/circuits-data.js"></script>
   <script src="js/circuits-view.js"></script>
   <script src="js/calculator.js"></script>
+  <script src="js/pinouts-data.js"></script>
+  <script src="js/pinouts-view.js"></script>
 
   <!-- Script de Navegación Básica -->
   <script>
@@ -350,6 +352,10 @@
       // Iniciar calculadora express
       if (typeof initCalculatorView === 'function') {
         initCalculatorView();
+      }
+      // Iniciar buscador de pinouts
+      if (typeof initPinoutsView === 'function') {
+        initPinoutsView();
       }
 
       const savedTab = localStorage.getItem('protolab_active_tab') || 'circuitos';
