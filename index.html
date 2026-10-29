@@ -281,6 +281,7 @@
   <script src="js/calculator.js"></script>
   <script src="js/pinouts-data.js"></script>
   <script src="js/pinouts-view.js"></script>
+  <script src="js/security-checklist.js"></script>
 
   <!-- Script de Navegación Básica -->
   <script>
@@ -356,6 +357,10 @@
       // Iniciar buscador de pinouts
       if (typeof initPinoutsView === 'function') {
         initPinoutsView();
+      }
+      // Iniciar checklist de seguridad
+      if (typeof initSecurityView === 'function') {
+        initSecurityView();
       }
 
       const savedTab = localStorage.getItem('protolab_active_tab') || 'circuitos';
