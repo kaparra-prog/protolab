@@ -135,5 +135,69 @@ const CIRCUITS_DATA = [
     ],
     warning: 'Verifica la polaridad del capacitor electrolítico. Conectarlo al revés puede hacer que se hinche o reviente al energizar el circuito.',
     diagramType: '555'
+  },
+  {
+    id: 'transistor-driver',
+    code: 'CKT-05',
+    category: 'transistores',
+    title: 'Driver de Conmutación con Transistor 2N2222 y Diodo 1N4007',
+    difficulty: 'Intermedio',
+    voltage: '5.0V o 12V DC',
+    time: '6 min',
+    summary: 'Interruptor electrónico para activar cargas que consumen más corriente de la que puede entregar un pin de Arduino (motores, relés, zumbadores o electroválvulas).',
+    bom: [
+      { name: 'Transistor NPN 2N2222A (TO-92)', qty: '1 unidad', note: 'Pinout frontal plano: 1=Emisor, 2=Base, 3=Colector', icon: 'memory', color: 'text-amber-600' },
+      { name: 'Diodo Rectificador 1N4007 (DO-41)', qty: '1 unidad', note: 'Protección flyback antiparalelo con la carga inductiva', icon: 'bolt', color: 'text-blue-600' },
+      { name: 'Resistencia de Base 1 kΩ (1/4 W)', qty: '1 unidad', note: 'Marrón-Negro-Rojo. Limita la corriente en la base a ~4mA', icon: 'resistor', color: 'text-amber-600' },
+      { name: 'Carga inductiva o Relevador 5V', qty: '1 unidad', note: 'Bobina de relé, solenoide o pequeño motor DC', icon: 'power', color: 'text-purple-600' },
+      { name: 'Protoboard y jumpers', qty: 'varios', note: 'Cables macho-macho de conexión rápida', icon: 'cable', color: 'text-slate-600' }
+    ],
+    connections: [
+      { step: 1, text: 'Coloca el transistor 2N2222A con su cara plana mirando hacia ti. Identifica Pin 1 (Emisor a la izquierda), Pin 2 (Base al centro) y Pin 3 (Colector a la derecha).' },
+      { step: 2, text: 'Conecta el Pin 1 (Emisor) directo al riel negativo de tierra (GND).' },
+      { step: 3, text: 'Conecta un extremo de la resistencia de 1kΩ al Pin 2 (Base). El otro extremo de la resistencia será tu señal de control (ej. pin digital 5V).' },
+      { step: 4, text: 'Conecta el Pin 3 (Colector) a un extremo de la bobina de la carga (relevador o motor).' },
+      { step: 5, text: 'Conecta el otro extremo de la bobina al riel positivo (+5V o +12V).' },
+      { step: 6, text: '¡MUY IMPORTANTE! Conecta el diodo 1N4007 en paralelo con la bobina: el Cátodo (franja plateada) hacia el positivo y el Ánodo (sin franja) hacia el Pin 3 (Colector).' }
+    ],
+    pinoutGuide: [
+      { pin: 'Emisor (Pin 1)', connectsTo: 'Riel negativo / Masa (GND)', type: 'ground' },
+      { pin: 'Base (Pin 2)', connectsTo: 'Resistencia de 1kΩ hacia señal de disparo', type: 'signal' },
+      { pin: 'Colector (Pin 3)', connectsTo: 'Negativo de la carga y ánodo del diodo flyback', type: 'positive' },
+      { pin: 'Cátodo Diodo (Franja)', connectsTo: 'Riel positivo (+Vcc)', type: 'positive' }
+    ],
+    warning: 'Si activas una bobina o motor sin el diodo de protección 1N4007, el pico de contratensión inductiva destruirá el transistor 2N2222 en el primer apagado.',
+    diagramType: 'transistor'
+  },
+  {
+    id: 'lm35-temperature',
+    code: 'CKT-06',
+    category: 'sensores',
+    title: 'Lectura de Temperatura Analógica con Sensor LM35',
+    difficulty: 'Principiante',
+    voltage: '5.0V DC',
+    time: '4 min',
+    summary: 'Medición precisa de temperatura en grados Celsius. El sensor entrega 10mV por cada grado centígrado sin necesidad de calibración matemática compleja.',
+    bom: [
+      { name: 'Sensor de Temperatura LM35DZ (TO-92)', qty: '1 unidad', note: 'Cara plana frontal: 1=+Vs, 2=Vout, 3=GND', icon: 'device_thermostat', color: 'text-cyan-600' },
+      { name: 'Capacitor Cerámico 100 nF (Código 104)', qty: '1 unidad', note: 'Filtro desacoplo de ruido entre +Vs y GND', icon: 'capacitor', color: 'text-amber-600' },
+      { name: 'Multímetro en escala de 2000 mV DC', qty: '1 unidad', note: 'Para lectura directa: 240 mV equivalen a 24.0 °C', icon: 'speed', color: 'text-purple-600' },
+      { name: 'Cables jumper para protoboard', qty: '3 unidades', note: 'Rojo (+5V), Negro (GND) y Amarillo/Azul (Vout)', icon: 'cable', color: 'text-slate-600' }
+    ],
+    connections: [
+      { step: 1, text: 'Orienta el LM35 con su cara plana hacia ti con las patas hacia abajo. De izquierda a derecha son: Pin 1 (+Vs), Pin 2 (Vout), Pin 3 (GND).' },
+      { step: 2, text: 'Inserta el Pin 1 (+Vs) en una fila conectada mediante cable rojo al riel positivo (+5V).' },
+      { step: 3, text: 'Inserta el Pin 3 (GND) en una fila conectada mediante cable negro al riel negativo (tierra).' },
+      { step: 4, text: 'Coloca el capacitor cerámico de 100nF lo más cerca posible entre el Pin 1 (+Vs) y el Pin 3 (GND) para eliminar ruidos de la fuente.' },
+      { step: 5, text: 'Conecta la punta roja del multímetro al Pin 2 central (Vout) y la punta negra a tierra (GND).' },
+      { step: 6, text: 'A temperatura ambiente de 22°C a 25°C leerás entre 0.22V y 0.25V en la pantalla.' }
+    ],
+    pinoutGuide: [
+      { pin: 'Pin 1 (+Vs)', connectsTo: 'Alimentación positiva regulada (+5V)', type: 'positive' },
+      { pin: 'Pin 2 (Vout)', connectsTo: 'Multímetro o entrada analógica A0', type: 'signal' },
+      { pin: 'Pin 3 (GND)', connectsTo: 'Riel negativo de tierra (GND)', type: 'ground' }
+    ],
+    warning: '¡Nunca inviertas el Pin 1 y el Pin 3! Si alimentas el LM35 al revés, se calentará a más de 90°C en 2 segundos y se quemará su calibración interna.',
+    diagramType: 'sensor'
   }
 ];

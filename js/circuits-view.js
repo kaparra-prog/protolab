@@ -69,6 +69,12 @@ function renderCircuitsCatalog() {
             <button onclick="setCircuitFilter('timers')" class="px-2.5 py-1 rounded-lg whitespace-nowrap transition-all ${currentCategoryFilter === 'timers' ? 'bg-primary text-white font-bold shadow-xs' : 'bg-white text-warm-gray border border-warm-border hover:bg-warm-card'}">
               555
             </button>
+            <button onclick="setCircuitFilter('transistores')" class="px-2.5 py-1 rounded-lg whitespace-nowrap transition-all ${currentCategoryFilter === 'transistores' ? 'bg-primary text-white font-bold shadow-xs' : 'bg-white text-warm-gray border border-warm-border hover:bg-warm-card'}">
+              Transistores
+            </button>
+            <button onclick="setCircuitFilter('sensores')" class="px-2.5 py-1 rounded-lg whitespace-nowrap transition-all ${currentCategoryFilter === 'sensores' ? 'bg-primary text-white font-bold shadow-xs' : 'bg-white text-warm-gray border border-warm-border hover:bg-warm-card'}">
+              Sensores
+            </button>
           </div>
         </div>
 
