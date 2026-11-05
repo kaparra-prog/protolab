@@ -132,7 +132,7 @@ function initCalculatorView() {
 
             <!-- Voltaje de Fuente (Vcc) -->
             <div>
-              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Voltaje de la Fuente ($V_{CC}$):</label>
+              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Voltaje de la fuente (Vcc):</label>
               <div class="flex items-center gap-2">
                 <input type="number" id="led-vcc-input" step="0.1" value="5.0" min="1" max="24" oninput="calculateLedResistor()" 
                        class="w-full bg-white text-sm font-mono font-bold text-warm-charcoal px-3 py-2 rounded-xl border border-warm-border focus:outline-none focus:border-primary-pastel">
@@ -161,7 +161,7 @@ function initCalculatorView() {
             <!-- Corriente Deseada (mA) -->
             <div>
               <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-semibold text-warm-charcoal">Corriente deseada ($I_{F}$):</label>
+                <label class="text-xs font-semibold text-warm-charcoal">Corriente del LED (I led):</label>
                 <span id="led-current-val" class="font-mono text-xs font-bold text-primary">15 mA</span>
               </div>
               <input type="range" id="led-current-slider" min="5" max="25" value="15" step="1" oninput="onLedCurrentSlider(this.value)" 
@@ -294,7 +294,7 @@ function initCalculatorView() {
             </h3>
 
             <div>
-              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Voltaje de Entrada ($V_{IN}$):</label>
+              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Voltaje de entrada (Vin):</label>
               <div class="flex items-center gap-2">
                 <input type="number" id="div-vin-input" step="0.5" value="5.0" min="1" max="30" oninput="calculateVoltageDivider()" 
                        class="w-full bg-white text-sm font-mono font-bold text-warm-charcoal px-3 py-2 rounded-xl border border-warm-border focus:outline-none focus:border-primary-pastel">
@@ -303,7 +303,7 @@ function initCalculatorView() {
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Voltaje de Salida Deseado ($V_{OUT}$):</label>
+              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Voltaje de salida deseado (Vout):</label>
               <div class="flex items-center gap-2">
                 <input type="number" id="div-vout-input" step="0.1" value="2.5" min="0.1" max="29" oninput="calculateVoltageDivider()" 
                        class="w-full bg-white text-sm font-mono font-bold text-warm-charcoal px-3 py-2 rounded-xl border border-warm-border focus:outline-none focus:border-primary-pastel">
@@ -312,7 +312,7 @@ function initCalculatorView() {
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Resistencia Base $R_1$ sugerida:</label>
+              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Resistencia R1 sugerida:</label>
               <select id="div-r1-select" onchange="calculateVoltageDivider()" class="w-full bg-white text-xs text-warm-charcoal px-3 py-2 rounded-xl border border-warm-border focus:outline-none focus:border-primary-pastel font-mono">
                 <option value="1000">1 kΩ (Consumo estándar ~1mA)</option>
                 <option value="10000" selected>10 kΩ (Recomendado para Lab y ADC)</option>
@@ -382,11 +382,11 @@ function initCalculatorView() {
           <div class="lg:col-span-5 bg-warm-card p-5 rounded-2xl border border-warm-border space-y-4">
             <h3 class="font-heading font-bold text-sm text-warm-charcoal flex items-center gap-1.5">
               <span class="material-symbols-outlined text-primary text-[18px]">speed</span>
-              <span>Ganancia Deseada ($A_V$)</span>
+              <span>Ganancia deseada (Av)</span>
             </h3>
 
             <div>
-              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Ganancia de Voltaje ($A_V$):</label>
+              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Ganancia de voltaje deseada (Av):</label>
               <div class="flex items-center gap-2">
                 <input type="number" id="opamp-gain-input" step="0.5" value="11" min="1" max="1000" oninput="calculateOpampGain()" 
                        class="w-full bg-white text-sm font-mono font-bold text-warm-charcoal px-3 py-2 rounded-xl border border-warm-border focus:outline-none focus:border-primary-pastel">
@@ -401,7 +401,7 @@ function initCalculatorView() {
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Resistencia de Entrada $R_1$ sugerida:</label>
+              <label class="block text-xs font-semibold text-warm-charcoal mb-1">Resistencia de entrada R1 sugerida:</label>
               <select id="opamp-r1-select" onchange="calculateOpampGain()" class="w-full bg-white text-xs text-warm-charcoal px-3 py-2 rounded-xl border border-warm-border focus:outline-none focus:border-primary-pastel font-mono">
                 <option value="1000" selected>1 kΩ (Típico estándar en Lab)</option>
                 <option value="2200">2.2 kΩ</option>
@@ -411,8 +411,8 @@ function initCalculatorView() {
 
             <div class="p-3 bg-white rounded-xl border border-warm-border font-mono text-[11px] text-warm-gray leading-relaxed">
               <span class="text-primary font-bold">Fórmula de Ganancia No Inversora:</span><br/>
-              A_v = 1 + ( R_f / R_1 )<br/>
-              Nota: ¡La ganancia siempre es mayor o igual a 1!
+              Av = 1 + ( Rf / R1 )<br/>
+              <span class="text-[10px] text-warm-gray block mt-0.5">Nota: La ganancia en configuración no inversora siempre es mayor o igual a 1.</span>
             </div>
           </div>
 
@@ -422,7 +422,7 @@ function initCalculatorView() {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="p-4 rounded-xl bg-white border border-warm-border">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-mono font-bold text-warm-gray">Resistencia Rf (Feedback)</span>
+                  <span class="text-xs font-mono font-bold text-warm-gray">Resistencia Rf (Realimentación)</span>
                   <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-warm-card-alt text-warm-charcoal">Pin 6 a Pin 2</span>
                 </div>
                 <div class="mt-2">

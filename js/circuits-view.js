@@ -3,6 +3,21 @@ let currentSelectedCircuitId = 'led-resistor';
 let currentCategoryFilter = 'all';
 let currentSearchQuery = '';
 
+// Generador seguro de íconos para evitar ligaduras faltantes de fuentes (ej. la palabra 'resistor' desfasada)
+function renderBomIcon(icon, colorClass = 'text-primary') {
+  if (icon === 'resistor') {
+    return `<svg class="w-5 h-5 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 12h3.5l2-5 3 10 3-10 3 10 2-5h3.5"/>
+    </svg>`;
+  }
+  if (icon === 'capacitor') {
+    return `<svg class="w-5 h-5 text-cyan-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M2 12h7m6 0h7M9 5v14m6-14v14"/>
+    </svg>`;
+  }
+  return `<span class="material-symbols-outlined text-[18px] ${colorClass} select-none leading-none overflow-hidden">${icon}</span>`;
+}
+
 function initCircuitsView() {
   renderCircuitsCatalog();
   renderCircuitDetail(currentSelectedCircuitId);
@@ -82,8 +97,7 @@ function renderCircuitsCatalog() {
                 </div>
                 <p class="text-xs text-warm-gray mt-1.5 line-clamp-2">${c.summary}</p>
                 <div class="flex items-center gap-3 mt-3 pt-2 border-t border-warm-border-light text-[11px] font-mono text-warm-gray">
-                  <span>⚡ ${c.voltage}</span>
-                  <span>⏱️ ${c.time}</span>
+                  <span>⚡ Voltaje: ${c.voltage}</span>
                 </div>
               </div>
             `;
@@ -127,10 +141,7 @@ function renderCircuitDetail(circuitId) {
         
         <div class="flex items-center gap-2 self-start sm:self-auto font-mono text-xs">
           <span class="px-2.5 py-1 rounded-lg bg-warm-card-alt border border-warm-border text-warm-charcoal font-semibold">
-            ⏱️ ${circuit.time}
-          </span>
-          <span class="px-2.5 py-1 rounded-lg bg-warm-card-alt border border-warm-border text-warm-charcoal font-semibold">
-            📊 ${circuit.difficulty}
+            📊 Dificultad: ${circuit.difficulty}
           </span>
         </div>
       </div>
@@ -148,8 +159,8 @@ function renderCircuitDetail(circuitId) {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           ${circuit.bom.map(item => `
             <div class="flex items-start gap-3 p-3 rounded-xl bg-warm-card border border-warm-border/80 hover:bg-white transition-all">
-              <div class="w-8 h-8 rounded-lg bg-white border border-warm-border flex items-center justify-center flex-shrink-0 shadow-2xs">
-                <span class="material-symbols-outlined text-[18px] ${item.color}">${item.icon}</span>
+              <div class="w-8 h-8 rounded-lg bg-white border border-warm-border flex items-center justify-center flex-shrink-0 shadow-2xs overflow-hidden">
+                ${renderBomIcon(item.icon, item.color)}
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-1">
@@ -204,16 +215,27 @@ function renderCircuitDetail(circuitId) {
             <tbody class="divide-y divide-warm-border-light bg-white">
               ${circuit.pinoutGuide.map(p => {
                 let badgeColor = 'bg-slate-100 text-slate-700';
-                if (p.type === 'positive') badgeColor = 'bg-rose-100 text-rose-700';
-                if (p.type === 'negative' || p.type === 'ground') badgeColor = 'bg-blue-100 text-blue-800';
-                if (p.type === 'signal') badgeColor = 'bg-amber-100 text-amber-800';
+                let typeLabel = 'Pasivo';
+                if (p.type === 'positive') {
+                  badgeColor = 'bg-rose-100 text-rose-700';
+                  typeLabel = 'Alimentación (+)';
+                } else if (p.type === 'negative') {
+                  badgeColor = 'bg-blue-100 text-blue-800';
+                  typeLabel = 'Alimentación (-)';
+                } else if (p.type === 'ground') {
+                  badgeColor = 'bg-blue-100 text-blue-800';
+                  typeLabel = 'Tierra (GND)';
+                } else if (p.type === 'signal') {
+                  badgeColor = 'bg-amber-100 text-amber-800';
+                  typeLabel = 'Señal';
+                }
                 return `
                   <tr class="hover:bg-warm-card-alt/40 transition-colors">
                     <td class="py-2.5 px-3 font-mono font-bold text-warm-charcoal">${p.pin}</td>
                     <td class="py-2.5 px-3 text-warm-charcoal">${p.connectsTo}</td>
                     <td class="py-2.5 px-3">
-                      <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase ${badgeColor}">
-                        ${p.type}
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold ${badgeColor}">
+                        ${typeLabel}
                       </span>
                     </td>
                   </tr>
