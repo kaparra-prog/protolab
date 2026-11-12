@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <meta name="theme-color" content="#FDFBF7"/>
   <title>ProtoLab | Asistente de Laboratorio de Circuitos</title>
   
+  <!-- Script inicial de detección de tema para evitar flash de blanco -->
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('protolab_theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -55,8 +69,6 @@
   <style>
     /* Suavizado y estilos generales */
     body {
-      background-color: #FDFBF7;
-      color: #2D2A2E;
       font-family: 'Hanken Grotesk', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
@@ -67,11 +79,14 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #FDFBF7;
+      background: transparent;
     }
     ::-webkit-scrollbar-thumb {
       background: #E8E2DC;
       border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #38333D;
     }
 
     /* Animación de pulso de taller seguro */
@@ -95,63 +110,70 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20 md:pb-6 select-none">
+<body class="min-h-screen flex flex-col pb-20 md:pb-6 select-none bg-warm-bg dark:bg-[#131114] text-warm-charcoal dark:text-[#F3EFF5] transition-colors duration-200">
 
   <!-- ========================================== -->
   <!-- BARRA SUPERIOR (HEADER)                   -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-warm-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+  <header class="sticky top-0 z-40 bg-[#FDFBF7]/95 dark:bg-[#161418]/95 backdrop-blur-md border-b border-warm-border dark:border-[#2D2832] transition-colors">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
       
       <!-- Logo y Nombre -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary-pastel to-lavender flex items-center justify-center shadow-sm text-white font-bold text-sm tracking-wide">
           PL
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <span class="font-heading font-bold text-lg text-warm-charcoal tracking-tight">ProtoLab</span>
-            <span class="px-1.5 py-0.5 rounded-full bg-sage-soft text-sage-dark font-mono text-[10px] font-bold uppercase tracking-wider">v1.0</span>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <span class="font-heading font-bold text-base sm:text-lg text-warm-charcoal dark:text-[#F3EFF5] tracking-tight">ProtoLab</span>
+            <span class="px-1.5 py-0.2 rounded-full bg-sage-soft dark:bg-emerald-950/40 text-sage-dark dark:text-emerald-300 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">v1.1</span>
           </div>
-          <p class="hidden sm:block text-xs text-warm-gray font-medium">Asistente de Laboratorio para Protoboard</p>
+          <p class="hidden sm:block text-[11px] text-warm-gray dark:text-stone-400 font-medium">Asistente de Laboratorio para Protoboard</p>
         </div>
       </div>
 
       <!-- Navegación de Escritorio (Oculta en Celular) -->
-      <nav class="hidden md:flex items-center gap-1 bg-warm-card-alt p-1 rounded-xl border border-warm-border">
-        <button onclick="switchTab('circuitos')" data-nav-tab="circuitos" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-primary-soft text-primary border border-primary-border shadow-xs flex items-center gap-1.5">
+      <nav class="hidden md:flex items-center gap-1 bg-warm-card-alt dark:bg-[#201D22] p-1 rounded-xl border border-warm-border dark:border-[#332D37]">
+        <button onclick="switchTab('circuitos')" data-nav-tab="circuitos" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-primary-soft dark:bg-primary/20 text-primary dark:text-primary-pastel border border-primary-border shadow-xs flex items-center gap-1.5 whitespace-nowrap">
           <span class="material-symbols-outlined text-[17px]">hub</span>
           <span>Circuitos Básicos</span>
         </button>
-        <button onclick="switchTab('calculadora')" data-nav-tab="calculadora" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray hover:text-warm-charcoal hover:bg-white/70 transition-all flex items-center gap-1.5">
+        <button onclick="switchTab('calculadora')" data-nav-tab="calculadora" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray dark:text-stone-300 hover:text-warm-charcoal dark:hover:text-white hover:bg-white/70 dark:hover:bg-[#29252E] transition-all flex items-center gap-1.5 whitespace-nowrap">
           <span class="material-symbols-outlined text-[17px]">calculate</span>
           <span>Calculadora</span>
         </button>
-        <button onclick="switchTab('pinouts')" data-nav-tab="pinouts" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray hover:text-warm-charcoal hover:bg-white/70 transition-all flex items-center gap-1.5">
+        <button onclick="switchTab('pinouts')" data-nav-tab="pinouts" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray dark:text-stone-300 hover:text-warm-charcoal dark:hover:text-white hover:bg-white/70 dark:hover:bg-[#29252E] transition-all flex items-center gap-1.5 whitespace-nowrap">
           <span class="material-symbols-outlined text-[17px]">memory</span>
           <span>Buscador de Pinouts</span>
         </button>
-        <button onclick="switchTab('seguridad')" data-nav-tab="seguridad" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray hover:text-warm-charcoal hover:bg-white/70 transition-all flex items-center gap-1.5">
+        <button onclick="switchTab('seguridad')" data-nav-tab="seguridad" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray dark:text-stone-300 hover:text-warm-charcoal dark:hover:text-white hover:bg-white/70 dark:hover:bg-[#29252E] transition-all flex items-center gap-1.5 whitespace-nowrap">
           <span class="material-symbols-outlined text-[17px]">verified_user</span>
           <span>Checklist Seguro</span>
         </button>
       </nav>
 
-      <!-- Herramientas Rápidas del Laboratorio -->
-      <div class="flex items-center gap-2">
-        <!-- Selector rápido de voltaje de referencia -->
-        <div class="hidden sm:flex items-center bg-warm-card-alt border border-warm-border p-1 rounded-lg gap-1 font-mono text-xs">
-          <span class="text-[10px] text-warm-gray px-1 font-bold">V_REF:</span>
-          <button onclick="setLabVoltage('3.3V')" class="vref-pill px-2 py-0.5 rounded text-warm-gray hover:bg-white transition-all">3.3V</button>
-          <button onclick="setLabVoltage('5.0V')" class="vref-pill px-2 py-0.5 rounded bg-white text-sage-dark font-bold shadow-xs border border-sage/40">5.0V</button>
-          <button onclick="setLabVoltage('12V')" class="vref-pill px-2 py-0.5 rounded text-warm-gray hover:bg-white transition-all">12V</button>
+      <!-- Herramientas Rápidas del Laboratorio (Accesibles en Móvil y Escritorio) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        
+        <!-- Selector global V_REF (Accesible en celular y desktop) -->
+        <div class="flex items-center bg-warm-card-alt dark:bg-[#201D22] border border-warm-border dark:border-[#38333D] p-0.5 sm:p-1 rounded-lg gap-0.5 sm:gap-1 font-mono text-[11px] sm:text-xs">
+          <span class="text-[9px] sm:text-[10px] text-warm-gray dark:text-stone-400 px-1 font-bold">V_REF:</span>
+          <button onclick="setLabVoltage('3.3V')" class="vref-pill px-1.5 sm:px-2 py-0.5 rounded text-warm-gray dark:text-stone-400 hover:bg-white dark:hover:bg-[#18161A] transition-all">3.3V</button>
+          <button onclick="setLabVoltage('5.0V')" class="vref-pill px-1.5 sm:px-2 py-0.5 rounded bg-white dark:bg-[#18161A] text-sage-dark dark:text-emerald-400 font-bold shadow-xs border border-sage/40 dark:border-emerald-700/50">5.0V</button>
+          <button onclick="setLabVoltage('12V')" class="vref-pill px-1.5 sm:px-2 py-0.5 rounded text-warm-gray dark:text-stone-400 hover:bg-white dark:hover:bg-[#18161A] transition-all">12V</button>
         </div>
 
         <!-- Botón Rápido Reglas de Oro -->
-        <button onclick="openRulesModal()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-alert-soft text-alert-red hover:bg-red-100 transition-all border border-red-200 text-xs font-bold font-heading">
+        <button onclick="openRulesModal()" class="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg bg-alert-soft dark:bg-red-950/40 text-alert-red dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/60 transition-all border border-red-200 dark:border-red-900/50 text-xs font-bold font-heading whitespace-nowrap">
           <span class="material-symbols-outlined text-[16px]">warning</span>
-          <span class="hidden lg:inline">Reglas de Oro</span>
+          <span class="hidden sm:inline">Reglas de Oro</span>
         </button>
+
+        <!-- Botón Dark Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="toggleDarkMode()" title="Cambiar tema (Claro / Oscuro)" class="w-8 h-8 rounded-lg flex items-center justify-center bg-warm-card-alt dark:bg-[#201D22] border border-warm-border dark:border-[#38333D] text-warm-charcoal dark:text-amber-300 hover:bg-white dark:hover:bg-[#28242B] transition-all shrink-0">
+          <span class="material-symbols-outlined text-[18px]" id="theme-icon">dark_mode</span>
+        </button>
+
       </div>
 
     </div>
@@ -160,52 +182,48 @@
   <!-- ========================================== -->
   <!-- CONTENEDOR PRINCIPAL                      -->
   <!-- ========================================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6">
     
     <!-- PESTAÑA 1: CIRCUITOS BÁSICOS -->
     <section id="tab-circuitos" class="tab-content active">
-      <div class="bg-white border border-warm-border rounded-2xl p-6 shadow-sm">
-        <h1 class="text-xl font-heading font-bold text-warm-charcoal">1. Circuitos Básicos y Conexiones en Protoboard</h1>
-        <p class="text-sm text-warm-gray mt-1">Selecciona un circuito de laboratorio para ver sus componentes necesarios y el orden de conexión pin a pin.</p>
+      <div class="bg-white dark:bg-[#1C1A1E] border border-warm-border dark:border-[#332D37] rounded-2xl p-5 sm:p-6 shadow-sm">
+        <h1 class="text-xl font-heading font-bold text-warm-charcoal dark:text-[#F3EFF5]">1. Circuitos Básicos y Conexiones en Protoboard</h1>
+        <p class="text-sm text-warm-gray dark:text-stone-400 mt-1">Selecciona un circuito de laboratorio para ver sus componentes necesarios, diagrama físico en protoboard y orden de conexión pin a pin.</p>
         <div id="circuitos-container" class="mt-4">
-          <!-- Cargado en el Paso 2 -->
-          <div class="p-8 text-center text-warm-gray border-2 border-dashed border-warm-border rounded-xl">
-            <span class="material-symbols-outlined text-4xl text-primary-pastel animate-pulse">hub</span>
-            <p class="mt-2 text-sm font-medium">Cargando catálogo de circuitos esenciales...</p>
-          </div>
+          <!-- Cargado dinámicamente -->
         </div>
       </div>
     </section>
 
     <!-- PESTAÑA 2: CALCULADORA EXPRESS -->
     <section id="tab-calculadora" class="tab-content">
-      <div class="bg-white border border-warm-border rounded-2xl p-6 shadow-sm">
-        <h1 class="text-xl font-heading font-bold text-warm-charcoal">2. Calculadora Express de Resistencias</h1>
-        <p class="text-sm text-warm-gray mt-1">Calcula resistencias comerciales para LEDs, divisores de tensión y amplificadores operacionales con código de colores.</p>
+      <div class="bg-white dark:bg-[#1C1A1E] border border-warm-border dark:border-[#332D37] rounded-2xl p-5 sm:p-6 shadow-sm">
+        <h1 class="text-xl font-heading font-bold text-warm-charcoal dark:text-[#F3EFF5]">2. Calculadora Express de Electrónica</h1>
+        <p class="text-sm text-warm-gray dark:text-stone-400 mt-1">Herramientas esenciales de cálculo rápido con validaciones físicas, código de colores de resistencias y temporizadores.</p>
         <div id="calculadora-container" class="mt-4">
-          <!-- Cargado en el Paso 3 -->
+          <!-- Cargado dinámicamente -->
         </div>
       </div>
     </section>
 
     <!-- PESTAÑA 3: BUSCADOR DE PINOUTS -->
     <section id="tab-pinouts" class="tab-content">
-      <div class="bg-white border border-warm-border rounded-2xl p-6 shadow-sm">
-        <h1 class="text-xl font-heading font-bold text-warm-charcoal">3. Buscador de Pinouts Express</h1>
-        <p class="text-sm text-warm-gray mt-1">Consulta los pines exactos y voltajes de trabajo de chips comunes sin leer hojas de datos de 40 páginas.</p>
+      <div class="bg-white dark:bg-[#1C1A1E] border border-warm-border dark:border-[#332D37] rounded-2xl p-5 sm:p-6 shadow-sm">
+        <h1 class="text-xl font-heading font-bold text-warm-charcoal dark:text-[#F3EFF5]">3. Buscador de Pinouts Express</h1>
+        <p class="text-sm text-warm-gray dark:text-stone-400 mt-1">Consulta los pines exactos, diagramas visuales y voltajes de trabajo de semiconductores sin leer hojas de datos densas.</p>
         <div id="pinouts-container" class="mt-4">
-          <!-- Cargado en el Paso 4 -->
+          <!-- Cargado dinámicamente -->
         </div>
       </div>
     </section>
 
     <!-- PESTAÑA 4: CHECKLIST DE SEGURIDAD -->
     <section id="tab-seguridad" class="tab-content">
-      <div class="bg-white border border-warm-border rounded-2xl p-6 shadow-sm">
-        <h1 class="text-xl font-heading font-bold text-warm-charcoal">4. Checklist de Seguridad Pre-Energizado</h1>
-        <p class="text-sm text-warm-gray mt-1">Verificaciones rápidas obligatorias antes de encender la fuente de poder para no quemar componentes.</p>
+      <div class="bg-white dark:bg-[#1C1A1E] border border-warm-border dark:border-[#332D37] rounded-2xl p-5 sm:p-6 shadow-sm">
+        <h1 class="text-xl font-heading font-bold text-warm-charcoal dark:text-[#F3EFF5]">4. Checklist de Seguridad Pre-Energizado</h1>
+        <p class="text-sm text-warm-gray dark:text-stone-400 mt-1">Verificaciones rápidas obligatorias antes de encender la fuente de poder para no quemar componentes.</p>
         <div id="seguridad-container" class="mt-4">
-          <!-- Cargado en el Paso 5 -->
+          <!-- Cargado dinámicamente -->
         </div>
       </div>
     </section>
@@ -215,20 +233,20 @@
   <!-- ========================================== -->
   <!-- BARRA DE NAVEGACIÓN INFERIOR (CELULARES)   -->
   <!-- ========================================== -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FDFBF7]/95 backdrop-blur-lg border-t border-warm-border px-2 py-1.5 flex items-center justify-around shadow-[0_-4px_16px_rgba(0,0,0,0.03)]">
-    <button onclick="switchTab('circuitos')" data-mobile-tab="circuitos" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-primary font-bold transition-all">
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FDFBF7]/95 dark:bg-[#161418]/95 backdrop-blur-lg border-t border-warm-border dark:border-[#2D2832] px-2 py-1.5 flex items-center justify-around shadow-[0_-4px_16px_rgba(0,0,0,0.03)]">
+    <button onclick="switchTab('circuitos')" data-mobile-tab="circuitos" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-primary dark:text-primary-pastel font-bold transition-all">
       <span class="material-symbols-outlined text-[22px]">hub</span>
       <span class="text-[10px] font-heading mt-0.5">Circuitos</span>
     </button>
-    <button onclick="switchTab('calculadora')" data-mobile-tab="calculadora" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray hover:text-warm-charcoal transition-all">
+    <button onclick="switchTab('calculadora')" data-mobile-tab="calculadora" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray dark:text-stone-400 hover:text-warm-charcoal dark:hover:text-white transition-all">
       <span class="material-symbols-outlined text-[22px]">calculate</span>
       <span class="text-[10px] font-heading mt-0.5">Calculadora</span>
     </button>
-    <button onclick="switchTab('pinouts')" data-mobile-tab="pinouts" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray hover:text-warm-charcoal transition-all">
+    <button onclick="switchTab('pinouts')" data-mobile-tab="pinouts" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray dark:text-stone-400 hover:text-warm-charcoal dark:hover:text-white transition-all">
       <span class="material-symbols-outlined text-[22px]">memory</span>
       <span class="text-[10px] font-heading mt-0.5">Pinouts</span>
     </button>
-    <button onclick="switchTab('seguridad')" data-mobile-tab="seguridad" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray hover:text-warm-charcoal transition-all relative">
+    <button onclick="switchTab('seguridad')" data-mobile-tab="seguridad" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray dark:text-stone-400 hover:text-warm-charcoal dark:hover:text-white transition-all relative">
       <span class="material-symbols-outlined text-[22px]">verified_user</span>
       <span class="text-[10px] font-heading mt-0.5">Seguridad</span>
       <span class="absolute top-1 right-2 w-2 h-2 rounded-full bg-sage live-pulse"></span>
@@ -238,37 +256,37 @@
   <!-- ========================================== -->
   <!-- MODAL: REGLAS DE ORO DEL LABORATORIO       -->
   <!-- ========================================== -->
-  <div id="rules-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-warm-border rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-      <div class="flex items-center justify-between pb-3 border-b border-warm-border">
-        <div class="flex items-center gap-2 text-alert-red font-heading font-bold text-base">
+  <div id="rules-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-[#1C1A1E] border border-warm-border dark:border-[#332D37] rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-center justify-between pb-3 border-b border-warm-border dark:border-[#2E2933]">
+        <div class="flex items-center gap-2 text-alert-red dark:text-red-400 font-heading font-bold text-base">
           <span class="material-symbols-outlined">warning</span>
           <span>Reglas de Oro del Taller</span>
         </div>
-        <button onclick="closeRulesModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-warm-gray hover:bg-warm-card-alt">
+        <button onclick="closeRulesModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-warm-gray dark:text-stone-400 hover:bg-warm-card-alt dark:hover:bg-[#28242B]">
           <span class="material-symbols-outlined text-sm">close</span>
         </button>
       </div>
-      <div class="py-4 space-y-3 text-xs leading-relaxed text-warm-charcoal">
-        <div class="flex gap-2.5 items-start bg-alert-soft/60 p-2.5 rounded-xl border border-red-200">
-          <span class="font-bold text-alert-red font-mono">1.</span>
+      <div class="py-4 space-y-3 text-xs leading-relaxed text-warm-charcoal dark:text-[#E8E4EB]">
+        <div class="flex gap-2.5 items-start bg-alert-soft/60 dark:bg-red-950/30 p-2.5 rounded-xl border border-red-200 dark:border-red-900/50">
+          <span class="font-bold text-alert-red dark:text-red-400 font-mono">1.</span>
           <p><strong>NUNCA armes ni muevas cables con la fuente encendida:</strong> Apaga siempre la fuente de alimentación antes de modificar tu protoboard.</p>
         </div>
-        <div class="flex gap-2.5 items-start bg-warm-card-alt p-2.5 rounded-xl border border-warm-border">
-          <span class="font-bold text-primary font-mono">2.</span>
+        <div class="flex gap-2.5 items-start bg-warm-card-alt dark:bg-[#242127] p-2.5 rounded-xl border border-warm-border dark:border-[#38333D]">
+          <span class="font-bold text-primary dark:text-primary-pastel font-mono">2.</span>
           <p><strong>Revisa la polaridad antes de conectar:</strong> Conectar positivo en tierra o al revés puede destruir circuitos integrados en menos de un segundo.</p>
         </div>
-        <div class="flex gap-2.5 items-start bg-warm-card-alt p-2.5 rounded-xl border border-warm-border">
-          <span class="font-bold text-primary font-mono">3.</span>
+        <div class="flex gap-2.5 items-start bg-warm-card-alt dark:bg-[#242127] p-2.5 rounded-xl border border-warm-border dark:border-[#38333D]">
+          <span class="font-bold text-primary dark:text-primary-pastel font-mono">3.</span>
           <p><strong>Cuidado con los capacitores electrolíticos y LEDs:</strong> Tienen pata positiva (ánodo / larga) y pata negativa (cátodo / corta o franja gris).</p>
         </div>
-        <div class="flex gap-2.5 items-start bg-sage-soft/70 p-2.5 rounded-xl border border-sage/40">
-          <span class="font-bold text-sage-dark font-mono">4.</span>
+        <div class="flex gap-2.5 items-start bg-sage-soft/70 dark:bg-emerald-950/30 p-2.5 rounded-xl border border-sage/40 dark:border-emerald-800/40">
+          <span class="font-bold text-sage-dark dark:text-emerald-300 font-mono">4.</span>
           <p><strong>Mide el voltaje con multímetro antes de alimentar:</strong> Asegúrate de que la perilla de la fuente esté en el valor correcto (ej. 5V) antes de conectar los caimanes.</p>
         </div>
       </div>
-      <div class="pt-3 border-t border-warm-border flex justify-end">
-        <button onclick="closeRulesModal()" class="w-full py-2 rounded-xl bg-warm-charcoal text-white text-xs font-bold hover:bg-black transition-all">
+      <div class="pt-3 border-t border-warm-border dark:border-[#2E2933] flex justify-end">
+        <button onclick="closeRulesModal()" class="w-full py-2 rounded-xl bg-warm-charcoal dark:bg-stone-700 text-white text-xs font-bold hover:bg-black dark:hover:bg-stone-600 transition-all">
           Entendido, volver al banco
         </button>
       </div>
@@ -277,17 +295,17 @@
 
   <!-- Scripts del Proyecto -->
   <script src="js/circuits-data.js"></script>
+  <script src="js/breadboard-view.js"></script>
   <script src="js/circuits-view.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/pinouts-data.js"></script>
   <script src="js/pinouts-view.js"></script>
   <script src="js/security-checklist.js"></script>
 
-  <!-- Script de Navegación Básica -->
+  <!-- Script de Control General y Navegación -->
   <script>
-    // Cambio entre pestañas
+    // Cambio entre pestañas principales
     function switchTab(tabId) {
-      // Ocultar todos los contenidos
       document.querySelectorAll('.tab-content').forEach(el => {
         el.classList.remove('active');
       });
@@ -300,9 +318,9 @@
       document.querySelectorAll('.nav-btn').forEach(btn => {
         const isSelected = btn.getAttribute('data-nav-tab') === tabId;
         if (isSelected) {
-          btn.className = "nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-primary-soft text-primary border border-primary-border shadow-xs flex items-center gap-1.5";
+          btn.className = "nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-primary-soft dark:bg-primary/20 text-primary dark:text-primary-pastel border border-primary-border shadow-xs flex items-center gap-1.5 whitespace-nowrap";
         } else {
-          btn.className = "nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray hover:text-warm-charcoal hover:bg-white/70 transition-all flex items-center gap-1.5";
+          btn.className = "nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-warm-gray dark:text-stone-300 hover:text-warm-charcoal dark:hover:text-white hover:bg-white/70 dark:hover:bg-[#29252E] transition-all flex items-center gap-1.5 whitespace-nowrap";
         }
       });
 
@@ -310,14 +328,17 @@
       document.querySelectorAll('[data-mobile-tab]').forEach(btn => {
         const isSelected = btn.getAttribute('data-mobile-tab') === tabId;
         if (isSelected) {
-          btn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-primary font-bold transition-all relative";
+          btn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-primary dark:text-primary-pastel font-bold transition-all relative";
         } else {
-          btn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray hover:text-warm-charcoal transition-all relative";
+          btn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-warm-gray dark:text-stone-400 hover:text-warm-charcoal dark:hover:text-white transition-all relative";
         }
       });
 
       // Guardar en sesión
-      localStorage.setItem('protolab_active_tab', tabId);
+      try {
+        localStorage.setItem('protolab_active_tab', tabId);
+      } catch (e) {}
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -329,19 +350,41 @@
       document.getElementById('rules-modal').classList.add('hidden');
     }
 
-    // Selector de voltaje de referencia
+    // Selector de voltaje de referencia global
     let currentLabVoltage = '5.0V';
     function setLabVoltage(volt) {
       currentLabVoltage = volt;
+      try {
+        localStorage.setItem('protolab_vref', volt);
+      } catch (e) {}
+
       document.querySelectorAll('.vref-pill').forEach(btn => {
         if (btn.textContent.trim() === volt) {
-          btn.className = "vref-pill px-2 py-0.5 rounded bg-white text-sage-dark font-bold shadow-xs border border-sage/40";
+          btn.className = "vref-pill px-1.5 sm:px-2 py-0.5 rounded bg-white dark:bg-[#18161A] text-sage-dark dark:text-emerald-400 font-bold shadow-xs border border-sage/40 dark:border-emerald-700/50";
         } else {
-          btn.className = "vref-pill px-2 py-0.5 rounded text-warm-gray hover:bg-white transition-all";
+          btn.className = "vref-pill px-1.5 sm:px-2 py-0.5 rounded text-warm-gray dark:text-stone-400 hover:bg-white dark:hover:bg-[#18161A] transition-all";
         }
       });
-      // Evento global para que las calculadoras se sincronicen
+
+      // Sincronizar calculadoras activas si aplica
       window.dispatchEvent(new CustomEvent('labVoltageChange', { detail: { voltage: volt } }));
+    }
+
+    // Modo Oscuro / Claro
+    function updateThemeIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      }
+    }
+
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try {
+        localStorage.setItem('protolab_theme', isDark ? 'dark' : 'light');
+      } catch (e) {}
+      updateThemeIcon();
     }
 
     // Inicialización al cargar la página
@@ -363,8 +406,20 @@
         initSecurityView();
       }
 
-      const savedTab = localStorage.getItem('protolab_active_tab') || 'circuitos';
-      switchTab(savedTab);
+      // Restaurar tema e icono
+      updateThemeIcon();
+
+      // Restaurar V_REF
+      try {
+        const savedVref = localStorage.getItem('protolab_vref') || '5.0V';
+        setLabVoltage(savedVref);
+      } catch (e) {}
+
+      // Restaurar pestaña activa
+      try {
+        const savedTab = localStorage.getItem('protolab_active_tab') || 'circuitos';
+        switchTab(savedTab);
+      } catch (e) {}
     });
   </script>
 </body>
